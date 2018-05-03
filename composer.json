@@ -1,0 +1,24 @@
+{
+    "name": "greeschenko/yii2-scud",
+    "description": "private scud module",
+    "type": "yii2-module",
+    "keywords": ["yii2","module","scud"],
+    "license": "MIT",
+    "minimum-stability":"dev",
+    "authors": [
+        {
+            "name": "Oleksiy Hryshchenko",
+            "email": "greeschenko@gmail.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*",
+        "yiisoft/yii2-bootstrap": "*",
+        "fortawesome/font-awesome": "~4.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "greeschenko\\scud\\": ""
+        }
+    }
+}
