@@ -9,8 +9,33 @@ namespace greeschenko\scud\helpers;
  */
 class SensorHelper
 {
+    public $apiHelper;
+
+    /**
+     * @param mixed
+     */
+    public function __construct()
+    {
+        $this->apiHelper = new JsonApiHelper();
+    }
+
     //TODO
     //readInput //read all input request
+
+    /**
+     * undocumented function.
+     */
+    public function readInput()
+    {
+        $data = $this->apiHelper->readRequest();
+
+        $data = (array) $data;
+
+        $data['test'] = 'its work';
+
+        return $data;
+    }
+
     //readMessages //case with processing all posible types
     //  powerOn
     //  checkAccess
