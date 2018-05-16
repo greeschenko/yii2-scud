@@ -15,7 +15,7 @@ class SensorController extends Controller
 
     public function init()
     {
-        $this->module = Yii::$app->getModule('pay');
+        $this->module = Yii::$app->getModule('scud');
         $this->api = new SensorHelper();
         $this->apiHelper = new JsonApiHelper();
 
@@ -102,7 +102,7 @@ class SensorController extends Controller
             ],
         ];
         //  ping
-        $data['pong'] = [
+        $data['ping'] = [
             'type' => 'Z5RWEB',
             'sn' => '50001',
             'messages' => [
@@ -138,5 +138,10 @@ class SensorController extends Controller
         //  clear_cards
 
         return false;
+    }
+
+    public function actionConsole()
+    {
+        return $this->render('console');
     }
 }
