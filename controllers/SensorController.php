@@ -6,6 +6,7 @@ use Yii;
 use yii\web\Controller;
 use greeschenko\scud\helpers\SensorHelper;
 use greeschenko\scud\helpers\JsonApiHelper;
+use greeschenko\scud\models\SensorSearch;
 
 class SensorController extends Controller
 {
@@ -33,7 +34,13 @@ class SensorController extends Controller
 
     public function actionList()
     {
-        return 'test';
+        $searchModel = new SensorSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('list', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     public function actionServer()
