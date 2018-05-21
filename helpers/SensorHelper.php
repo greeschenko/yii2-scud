@@ -31,8 +31,6 @@ class SensorHelper
 
         $data = (array) $data;
 
-        $data['test'] = 'its work';
-
         return $data;
     }
 

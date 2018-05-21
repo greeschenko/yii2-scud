@@ -74,4 +74,26 @@ class Sensor extends \yii\db\ActiveRecord
             'controller_ip' => 'IP контроллера',
         ];
     }
+
+    /**
+     * handle messages from sensor.
+     */
+    public function handleMessages($req)
+    {
+        if (isset($req['messages'])) {
+            foreach ($req['messages'] as $msg) {
+                switch ($msg['operation']) {
+                    case 'power_on':
+                        $this->handlePowerOn($msg);
+                        break;
+                    case 'ping':
+                        $this->handlePing($msg);
+                        break;
+                    case 'events':
+                        $this->handleEvents($msg);
+                        break;
+                }
+            }
+        }
+    }
 }

@@ -6,7 +6,9 @@ use Yii;
 use yii\web\Controller;
 use greeschenko\scud\helpers\SensorHelper;
 use greeschenko\scud\helpers\JsonApiHelper;
+use greeschenko\scud\models\Sensor;
 use greeschenko\scud\models\SensorSearch;
+use greeschenko\scud\models\SensorEventsSearch;
 
 class SensorController extends Controller
 {
@@ -43,11 +45,43 @@ class SensorController extends Controller
         ]);
     }
 
+    public function actionEvents()
+    {
+        $searchModel = new SensorEventsSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('events', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
     public function actionServer()
     {
+        $res = [];
         $req = $this->api->readInput();
+        $req = (array) $req;
 
-        return json_encode($req);
+        if (isset($req['sn'])) {
+            $model = Sensor::findOne($req['sn']);
+            if ($model == null) {
+                $model = new Sensor();
+                $model->sn = $req['sn'];
+                if ($model->save()) {
+                    $res[] = 'add sensor '.$model->sn;
+                } else {
+                    $res[] = $model->errors;
+                }
+            }
+        } else {
+            $res[] = 'wrong data';
+            $res[] = $req;
+            $res[] = $req['sn'];
+        }
+
+        $model->handleMessages($req);
+
+        return json_encode($res);
     }
 
     public function actionTestClient()
@@ -55,7 +89,7 @@ class SensorController extends Controller
         $data = [];
         //in
         //  power_on
-        $data['power_on'] = [
+        $data[] = [
             'type' => 'Z5RWEB',
             'sn' => '50001',
             'messages' => [
@@ -70,21 +104,21 @@ class SensorController extends Controller
                 ],
             ],
         ];
-        //  check_access
-        $data['check_access'] = [
+        //  ping
+        $data[] = [
             'type' => 'Z5RWEB',
             'sn' => '50001',
             'messages' => [
                 [
                     'id' => 123456789,
-                    'operation' => 'check_access',
-                    'card' => '00B5009EC1A8',
-                    'reader' => 1,
+                    'operation' => 'ping',
+                    'active' => 1,
+                    'mode' => 0,
                 ],
             ],
         ];
         //  events
-        $data['events'] = [
+        $data[] = [
             'type' => 'Z5RWEB',
             'sn' => '50001',
             'messages' => [
@@ -108,19 +142,19 @@ class SensorController extends Controller
                 ],
             ],
         ];
-        //  ping
-        $data['ping'] = [
-            'type' => 'Z5RWEB',
-            'sn' => '50001',
-            'messages' => [
-                [
-                    'id' => 123456789,
-                    'operation' => 'ping',
-                    'active' => 1,
-                    'mode' => 0,
-                ],
-            ],
-        ];
+        //  check_access
+        //$data['check_access'] = [
+            //'type' => 'Z5RWEB',
+            //'sn' => '50001',
+            //'messages' => [
+                //[
+                    //'id' => 123456789,
+                    //'operation' => 'check_access',
+                    //'card' => '00B5009EC1A8',
+                    //'reader' => 1,
+                //],
+            //],
+        //];
 
         foreach ($data as $key => $value) {
             $res = $this->apiHelper->sendRequest(
