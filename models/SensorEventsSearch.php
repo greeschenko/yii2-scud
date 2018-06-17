@@ -42,7 +42,7 @@ class SensorEventsSearch extends SensorEvents
      */
     public function search($params)
     {
-        $query = Sensor::find();
+        $query = static::find();
 
         // add conditions that should always apply here
         //$query->where(['!=', 'username', 'root']);

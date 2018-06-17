@@ -56,6 +56,15 @@ class m180518_131528_init extends Migration
         $this->addCommentOnColumn('sensor_events', 'card', 'номер карти');
         $this->addCommentOnColumn('sensor_events', 'time', 'время события');
         $this->addCommentOnColumn('sensor_events', 'flag', 'флаги собития');
+
+        $this->createTable('{{%sensor_commands}}', [
+            'id' => $this->primaryKey(),
+            'created_at' => $this->integer()->notNull(),
+            'updated_at' => $this->integer()->notNull(),
+            'command' => $this->text(),
+            'sensor_id' => $this->integer()->notNull(),
+            'status' => $this->string(),
+        ], $tableOptions);
     }
 
     public function safeDown()
@@ -63,5 +72,6 @@ class m180518_131528_init extends Migration
         $this->dropTable('{{%sensor}}');
         $this->dropTable('{{%sensor_card}}');
         $this->dropTable('{{%sensor_events}}');
+        $this->dropTable('{{%sensor_commands}}');
     }
 }

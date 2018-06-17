@@ -63,7 +63,7 @@ class SensorController extends Controller
         $req = (array) $req;
 
         if (isset($req['sn'])) {
-            $model = Sensor::findOne($req['sn']);
+            $model = Sensor::find()->where(['sn' => $req['sn']])->one();
             if ($model == null) {
                 $model = new Sensor();
                 $model->sn = $req['sn'];
